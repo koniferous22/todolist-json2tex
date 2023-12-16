@@ -1,0 +1,98 @@
+[
+  {
+    "sectionTitle": "Coding",
+    "sectionAlias": "coding",
+    "forest": [
+      {
+        "type": "ulNode",
+        "alias": "develop-feature",
+        "text": "Develop Feature",
+        "children": [
+          {
+            "type": "textNode",
+            "alias": "refactor-code",
+            "text": "Refactor Code"
+          },
+          {
+            "type": "textNode",
+            "text": "Write Tests"
+          },
+          {
+            "type": "ulNode",
+            "text": "Test PR",
+            "children": [
+              {
+                "type": "textNode",
+                "text": "Review Changes"
+              },
+              {
+                "type": "textNode",
+                "text": "Provide Feedback"
+              }
+            ]
+          },
+          {
+            "type": "textNode",
+            "text": "Deploy Application"
+          }
+        ]
+      },
+      {
+        "type": "ulNode",
+        "text": "Tesintg LaTeX",
+        "children": [
+          {
+            "type": "textNode",
+            "text": "$2 + 3 \\rightarrow 5$"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "sectionTitle": "Food",
+    "sectionAlias": "food",
+    "forest": [
+      {
+        "type": "ulNode",
+        "text": "Shopping",
+        "children": [
+          {
+            "type": "textNode",
+            "text": "Groceries"
+          },
+          {
+            "type": "textNode",
+            "text": "Vegetables"
+          },
+          {
+            "type": "textNode",
+            "text": "Fruits"
+          }
+        ]
+      },
+      {
+        "type": "textNode",
+        "text": "Food Preparation"
+      },
+      {
+        "type": "textNode",
+        "text": "Dinner at 6pm"
+      },
+      {
+        "type": "textNode",
+        "text": "Wash Dishes"
+      }
+    ]
+  },
+  {
+    "sectionTitle": "Social",
+    "sectionAlias": "social",
+    "forest": [
+      {
+        "type": "textNode",
+        "text": "Go out with Friends"
+      }
+    ]
+  }
+]

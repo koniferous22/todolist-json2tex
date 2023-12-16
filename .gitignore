@@ -1,0 +1,5 @@
+.stack-work/
+*~
+*.log
+*.aux
+/bin/

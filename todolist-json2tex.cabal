@@ -1,0 +1,104 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.36.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           todolist-json2tex
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/todolist-json2tex#readme>
+homepage:       https://github.com/koniferous22/todolist-json2tex#readme
+bug-reports:    https://github.com/koniferous22/todolist-json2tex/issues
+author:         koniferous22
+maintainer:     samuel.melkovic@gmail.com
+copyright:      2023 Author name here
+license:        GPL-3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/koniferous22/todolist-json2tex
+
+library
+  exposed-modules:
+      Conditions.Data
+      Conditions.Resolve
+      Ctx
+      Ctx.CliArgs
+      Ctx.EnvVariables
+      ErrorHandling
+      Rendering.Mustache
+      Rendering.Options
+      Rendering.Tex
+      Rendering.Utils
+      SubtreeAttachment
+      SubtreeAttachment.Data
+      SubtreeAttachment.LeafNodeAttachmentBehaviour
+      TodoNode.Data
+      TodoNode.Render
+      TodoNode.Resolve
+      TodoSection.Data
+      TodoSection.Render
+      TodoSection.Resolve
+      Utils.ErrorHandling
+  other-modules:
+      Paths_todolist_json2tex
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , mtl
+    , mustache
+    , optparse-applicative
+    , text
+    , time
+  default-language: Haskell2010
+
+executable todolist-json2tex-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_todolist_json2tex
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , mtl
+    , mustache
+    , optparse-applicative
+    , text
+    , time
+    , todolist-json2tex
+  default-language: Haskell2010
+
+test-suite todolist-json2tex-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_todolist_json2tex
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , mtl
+    , mustache
+    , optparse-applicative
+    , text
+    , time
+    , todolist-json2tex
+  default-language: Haskell2010

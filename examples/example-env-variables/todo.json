@@ -1,0 +1,27 @@
+[
+  {
+    "sectionTitle": "Todo",
+    "sectionAlias": "todo",
+    "forest": [
+      {
+        "type": "textNode",
+        "text": "Condition true",
+        "conditions": {
+          "type": "envVariable",
+          "envVariable": "TODOLIST_JSON2TEX_EXAMPLE_CONDITION"
+        }
+      },
+      {
+        "type": "textNode",
+        "text": "Condition false",
+        "conditions": {
+          "type": "notOperator",
+          "condition": {
+            "type": "envVariable",
+            "envVariable": "TODOLIST_JSON2TEX_EXAMPLE_CONDITION"
+          }
+        }
+      }
+    ]
+  }
+]
