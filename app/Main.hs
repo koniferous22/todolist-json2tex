@@ -73,7 +73,6 @@ main = do
       contents <- (liftIO . readInput . input . cliArgs) ctx
       todo <-
         retrieveRight . A.eitherDecode $ contents :: RuntimeMonad [TodoSection]
-      let todoWithConditionsResolved = resolveTodoSections ctx todo
       let subtreeAttachmentInputFiles = attachedJsonSubtrees . cliArgs $ ctx
       let subtreeAttachmentBehaviour = resolveSubtreeAttachmentBehaviour ctx
       attachmentInputs <-
@@ -83,7 +82,7 @@ main = do
       subtreeAttachments <- retrieveRight . concatResults $ attachmentInputs
       todoWithSubtrees <-
         retrieveRight .
-        attachSubtrees subtreeAttachmentBehaviour todoWithConditionsResolved $
+        attachSubtrees subtreeAttachmentBehaviour todo $
         subtreeAttachments
       let title' = title . cliArgs $ ctx
       let subtitle' = subtitle . cliArgs $ ctx
@@ -94,6 +93,7 @@ main = do
               { enumerateTag = resolveEnumerateTag ctx
               , itemizeTag = resolveItemizeTag ctx
               }
+      let todoResolved = resolveTodoSections ctx todoWithSubtrees
       case outputFile of
         Nothing ->
           case templateFile of
@@ -103,14 +103,14 @@ main = do
                 (renderTodoBare texOpts)
                 title'
                 subtitle'
-                todoWithSubtrees
+                todoResolved
             Just tf ->
               renderTodo
                 (renderMustacheTemplate TIO.putStr tf)
                 (resolveMustacheCtx texOpts)
                 title'
                 subtitle'
-                todoWithSubtrees
+                todoResolved
         Just f ->
           case templateFile of
             Nothing ->
@@ -119,14 +119,14 @@ main = do
                 (renderTodoBare texOpts)
                 title'
                 subtitle'
-                todoWithSubtrees
+                todoResolved
             Just tf ->
               renderTodo
                 (renderMustacheTemplate (TIO.writeFile f) tf)
                 (resolveMustacheCtx texOpts)
                 title'
                 subtitle'
-                todoWithSubtrees
+                todoResolved
   case result of
     Left err -> putStrLn err
     Right _ -> return ()
