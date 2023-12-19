@@ -25,18 +25,19 @@ renderBeginEndForNonEmptyLists opts tag offset l@(_:_) =
   BB.stringUtf8 "\\end{" <> BB.stringUtf8 tag <> BB.stringUtf8 "}\n"
 
 renderTexNode :: TexRenderOptions -> Int -> TodoNode -> BB.Builder
-renderTexNode _ offset (TodoTextNode t _ _) =
+renderTexNode _ offset (TodoTextNode _ _ t) =
   repeatChar ' ' offset <>
   BB.stringUtf8 "\\item " <> BB.stringUtf8 t <> BB.charUtf8 '\n'
-renderTexNode opts offset (TodoItemizeNode t _ _ children') =
+renderTexNode opts offset (TodoItemizeNode _ _ t children') =
   repeatChar ' ' offset <>
   BB.stringUtf8 "\\item " <>
   BB.stringUtf8 t <>
   BB.charUtf8 '\n' <>
   renderBeginEndForNonEmptyLists opts (itemizeTag opts) offset children'
-renderTexNode opts offset (TodoEnumerateNode t _ _ children') =
+renderTexNode opts offset (TodoEnumerateNode _ _ t children') =
   repeatChar ' ' offset <>
   BB.stringUtf8 "\\item " <>
   BB.stringUtf8 t <>
   BB.charUtf8 '\n' <>
   renderBeginEndForNonEmptyLists opts (enumerateTag opts) offset children'
+renderTexNode opts offset (TodoFragmentNode _ _ children') = renderTexNodes opts offset children'

@@ -12,7 +12,7 @@ import Data.Char (toLower)
 import Data.Time (LocalTime(..))
 import Data.Time.Format (defaultTimeLocale, parseTimeM)
 import Options.Applicative
-import SubtreeAttachment.LeafNodeAttachmentBehaviour
+import SubtreeAttachment.AttachmentBehaviour
 import Utils.ErrorHandling (maybeToEither)
 
 data Todo2TexCliArgs = Todo2TexCliArgs
@@ -24,23 +24,23 @@ data Todo2TexCliArgs = Todo2TexCliArgs
   , attachedJsonSubtrees :: [String]
   , latexEnumerateTagCliOpt :: Maybe String
   , latexItemizeTagCliOpt :: Maybe String
-  , leafNodeAttachmentBahaviour :: Maybe LeafNodeAttachmentBehaviour
+  , textNodeAttachmentBahaviour :: Maybe TextNodeAttachmentBehaviour
   , input :: Maybe String
   } deriving (Show)
 
-leafNodeAttachmentBahaviourParser :: Parser LeafNodeAttachmentBehaviour
-leafNodeAttachmentBahaviourParser =
+textNodeAttachmentBahaviourParser :: Parser TextNodeAttachmentBehaviour
+textNodeAttachmentBahaviourParser =
   option caseInsensitiveEnum $
-  long "leaf-attachment-behaviour" <>
-  metavar "<leaf-attachment-behaviour>" <>
+  long "text-attachment-behaviour" <>
+  metavar "<text-attachment-behaviour>" <>
   help "Specify the enum value (Fail, Replace_Enumerate, Replace_Itemize)"
   where
     caseInsensitiveEnum =
       eitherReader $ \arg ->
         case map toLower arg of
           "fail" -> Right Fail
-          "replace_enumerate" -> Right ReplaceWithEnumerateNode
-          "replace_itemize" -> Right ReplaceWithItemizeNode
+          "replace_enumerate" -> Right ReplaceTextWithEnumerateNode
+          "replace_itemize" -> Right ReplaceTextWithItemizeNode
           _ ->
             Left
               "Invalid value. Use Fail, Replace_Enumerate, or Replace_Itemize)"
@@ -97,7 +97,7 @@ todo2texParser =
         help
           ("Latex tag used in \\begin{itemize} - custom styling; available in env variable $" ++
            latexItemizeTagEnvVariable))) <*>
-  optional leafNodeAttachmentBahaviourParser <*>
+  optional textNodeAttachmentBahaviourParser <*>
   optional (strArgument (metavar "<input>"))
 
 todo2texParserInfo :: ParserInfo Todo2TexCliArgs

@@ -1,12 +1,12 @@
 module SubtreeAttachment
-  ( LeafNodeAttachmentBehaviour(..)
+  ( TextNodeAttachmentBehaviour(..)
   , attachSubtrees
   ) where
 
 import Control.Monad (foldM)
 import SubtreeAttachment.Data (SubtreeAttachment(..))
-import SubtreeAttachment.LeafNodeAttachmentBehaviour
-  ( LeafNodeAttachmentBehaviour(..)
+import SubtreeAttachment.AttachmentBehaviour
+  ( TextNodeAttachmentBehaviour(..)
   )
 import TodoNode.Data (TodoNode(..))
 import TodoSection.Data (TodoSection(..))
@@ -16,7 +16,7 @@ compareWithMaybe a = (Just a ==)
 
 attachSubtreesToListOfSections ::
      [TodoSection]
-  -> LeafNodeAttachmentBehaviour
+  -> TextNodeAttachmentBehaviour
   -> SubtreeAttachment
   -> Either String [TodoSection]
 attachSubtreesToListOfSections (x:xs) b a@(SubtreeAttachment (y:ys) st) =
@@ -31,7 +31,7 @@ attachSubtreesToListOfSections _ _ (SubtreeAttachment _ _) = Left "Welp..."
 
 attachSubtreesToSection ::
      TodoSection
-  -> LeafNodeAttachmentBehaviour
+  -> TextNodeAttachmentBehaviour
   -> SubtreeAttachment
   -> Either String TodoSection
 attachSubtreesToSection (TodoSection title' alias' forest') b a =
@@ -39,7 +39,7 @@ attachSubtreesToSection (TodoSection title' alias' forest') b a =
 
 attachSubtreesToListOfNodes ::
      [TodoNode]
-  -> LeafNodeAttachmentBehaviour
+  -> TextNodeAttachmentBehaviour
   -> SubtreeAttachment
   -> Either String [TodoNode]
 attachSubtreesToListOfNodes (x:xs) b a@(SubtreeAttachment (y:ys) st) =
@@ -54,26 +54,29 @@ attachSubtreesToListOfNodes _ _ (SubtreeAttachment _ st) = Right st
 
 attachSubtreesToNode ::
      TodoNode
-  -> LeafNodeAttachmentBehaviour
+  -> TextNodeAttachmentBehaviour
   -> SubtreeAttachment
   -> Either String TodoNode
-attachSubtreesToNode (TodoItemizeNode text' alias' conditions' children') b a =
-  TodoItemizeNode text' alias' conditions' <$>
+attachSubtreesToNode (TodoItemizeNode alias' conditions' text' children') b a =
+  TodoItemizeNode alias' conditions' text' <$>
   attachSubtreesToListOfNodes children' b a
-attachSubtreesToNode (TodoEnumerateNode text' alias' conditions' children') b a =
-  TodoEnumerateNode text' alias' conditions' <$>
+attachSubtreesToNode (TodoEnumerateNode alias' conditions' text' children') b a =
+  TodoEnumerateNode alias' conditions' text' <$>
   attachSubtreesToListOfNodes children' b a
-attachSubtreesToNode (TodoTextNode text' alias' conditions') b@ReplaceWithItemizeNode a =
-  TodoItemizeNode text' alias' conditions' <$>
+attachSubtreesToNode (TodoFragmentNode alias' conditions' children') b a =
+  TodoFragmentNode alias' conditions' <$>
+  attachSubtreesToListOfNodes children' b a
+attachSubtreesToNode (TodoTextNode alias' conditions' text') b@ReplaceTextWithItemizeNode a =
+  TodoItemizeNode alias' conditions' text' <$>
   attachSubtreesToListOfNodes [] b a
-attachSubtreesToNode (TodoTextNode text' alias' conditions') b@ReplaceWithEnumerateNode a =
-  TodoEnumerateNode text' alias' conditions' <$>
+attachSubtreesToNode (TodoTextNode alias' conditions' text') b@ReplaceTextWithEnumerateNode a =
+  TodoEnumerateNode alias' conditions' text' <$>
   attachSubtreesToListOfNodes [] b a
-attachSubtreesToNode _ _ _ =
+attachSubtreesToNode _ Fail _ =
   Left "Cannot attach to leaf node - see CLI option --leaf-attachment-behaviour"
 
 attachSubtrees ::
-     LeafNodeAttachmentBehaviour
+     TextNodeAttachmentBehaviour
   -> [TodoSection]
   -> [SubtreeAttachment]
   -> Either String [TodoSection]

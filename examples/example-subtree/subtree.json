@@ -15,5 +15,18 @@
         "text": "Refactor UI"
       }
     ]
+  },
+  {
+    "attachTo": ["social", "test-fragment"],
+    "subtrees": [
+      {
+        "type": "textNode",
+        "text": "Fragment Attachment Task 1"
+      },
+      {
+        "type": "textNode",
+        "text": "Fragment Attachment Task 2"
+      }
+    ]
   }
 ]

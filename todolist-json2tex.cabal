@@ -36,8 +36,8 @@ library
       Rendering.Tex
       Rendering.Utils
       SubtreeAttachment
+      SubtreeAttachment.AttachmentBehaviour
       SubtreeAttachment.Data
-      SubtreeAttachment.LeafNodeAttachmentBehaviour
       TodoNode.Data
       TodoNode.Render
       TodoNode.Resolve

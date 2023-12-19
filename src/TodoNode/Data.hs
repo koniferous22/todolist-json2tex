@@ -8,39 +8,49 @@ module TodoNode.Data
 import Conditions.Data (Condition(..))
 import Data.Aeson
 import Data.Aeson.Types (Parser)
+import Data.Maybe(fromMaybe)
 import GHC.Generics
 
 data TodoNode
   = TodoTextNode
-      { text :: String
-      , alias :: Maybe String
+      {
+        alias :: Maybe String
       , conditions :: Maybe Condition
+      , text :: String
       }
   | TodoItemizeNode
-      { text :: String
-      , alias :: Maybe String
+      { 
+        alias :: Maybe String
       , conditions :: Maybe Condition
+      , text :: String
       , children :: [TodoNode]
       }
   | TodoEnumerateNode
-      { text :: String
-      , alias :: Maybe String
+      { alias :: Maybe String
       , conditions :: Maybe Condition
+      , text :: String
       , children :: [TodoNode]
       }
+  | TodoFragmentNode
+    {
+        alias :: Maybe String
+      , conditions :: Maybe Condition
+      , children :: [TodoNode]
+    }
   deriving (Show, Generic)
 
 instance FromJSON TodoNode where
   parseJSON =
     withObject "TodoNode" $ \obj -> do
       tag <- obj .: "type" :: Parser String
-      text' <- obj .: "text"
       alias' <- obj .:? "alias"
       conditions' <- obj .:? "conditions"
       case tag of
-        "textNode" -> return $ TodoTextNode text' alias' conditions'
+        "textNode" -> TodoTextNode alias' conditions' <$> obj .: "text"
         "ulNode" ->
-          TodoItemizeNode text' alias' conditions' <$> obj .: "children"
+          TodoItemizeNode alias' conditions' <$> obj .: "text" <*> (fromMaybe [] <$> obj .:? "children")
         "olNode" ->
-          TodoEnumerateNode text' alias' conditions' <$> obj .: "children"
+          TodoEnumerateNode alias' conditions' <$> obj .: "text" <*> (fromMaybe [] <$> obj .:? "children")
+        "fragmentNode" ->
+          TodoFragmentNode alias' conditions' <$> (fromMaybe [] <$> obj .:? "children")
         _ -> fail "Invalid tag"

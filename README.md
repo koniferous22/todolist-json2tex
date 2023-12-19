@@ -52,9 +52,123 @@
 6. View the [output](./examples/example-basic/pdf-output/todo.pdf)
 7. Optional - customize the input [mustache template](./examples/example-basic/mustache/template.tex), for different styling
 
+## Tree node types
+
+There are 4 node types
+
+### `"type": "ulNode"`
+
+#### JSON
+
+```json
+{
+  "type": "textNode",
+  "text": "Example Text"
+}
+```
+
+#### `.tex` output
+
+```tex
+\item Example Text
+```
+
+### `"type": "olNode"`
+
+#### JSON
+
+```json
+{
+  "type": "olNode",
+  "text": "My Enumerate",
+  "children": [
+    {
+      "type": "textNode",
+      "text": "Example Item"
+    }
+  ]
+}
+```
+
+#### `.tex` output
+
+```tex
+\begin{enumerate}
+  \item Example Item
+\end{enumerate}
+```
+
+### `"type": "textNode"`
+
+#### JSON
+
+```json
+{
+  "type": "ulNode",
+  "text": "My Itemize",
+  "children": [
+    {
+      "type": "textNode",
+      "text": "Example Item"
+    }
+  ]
+}
+```
+
+#### `.tex` output
+
+```tex
+\begin{itemize}
+  \item Example Item
+\end{itemize}
+```
+
+### `"type": "fragmentNode"`
+
+Fragment node just passes the rendering ot its children, kinda like `React.Fragment`
+
+#### JSON
+
+```json
+{
+  "type": "fragmentNode",
+  "children": [
+    {
+      "type": "ulNode",
+      "text": "My Itemize",
+      "children": [
+        {
+          "type": "textNode",
+          "text": "Example Item"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### `.tex` output
+
+```tex
+\begin{itemize}
+  \item Example Item
+\end{itemize}
+```
+
+### Notes
+
+Note that the entire todo context is wrapped in, so rendering `textNode` outside of scope of `olNode`, or `ulNode` isn't a problem
+
+```tex
+\section{Some section name}
+\begin{itemize}
+% contents
+\end{itemize}
+```
+
 ## Templating notes
 
-[Mustache](https://mustache.github.io/mustache.5.html) templating context consists only of 3 basic variables
+`todolist-json2tex` uses [Mustache](https://mustache.github.io/mustache.5.html) templates under the hood. Templating context consists only of 3 basic variables
 
 ```tex
 % retrieved from cli opt --title
@@ -137,7 +251,7 @@ Should produce following [pdf](./examples/example-subtree/pdf-output/todo.pdf)
   --mustache-template "./examples/example-subtree/mustache/template.tex" \
   --output "./examples/example-subtree/tex-output/todo.tex" \
   --attach-json-subtree "./examples/example-subtree/subtree.json" \
-  --leaf-attachment-behaviour replace_itemize \
+  --text-attachment-behaviour replace_itemize \
   ./examples/example-subtree/todo.json
 pdflatex \
   -interaction=errorstopmode \

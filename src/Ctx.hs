@@ -35,8 +35,8 @@ import Data.Time
   , nominalDay
   , zonedTimeToLocalTime
   )
-import SubtreeAttachment.LeafNodeAttachmentBehaviour
-  ( LeafNodeAttachmentBehaviour(..)
+import SubtreeAttachment.AttachmentBehaviour
+  ( TextNodeAttachmentBehaviour(..)
   )
 
 data Ctx = Ctx
@@ -77,9 +77,9 @@ resolveLocalTime ctx =
 resolveDayOfWeek :: Ctx -> DayOfWeek
 resolveDayOfWeek = dayOfWeek . localDay . resolveLocalTime
 
-resolveSubtreeAttachmentBehaviour :: Ctx -> LeafNodeAttachmentBehaviour
+resolveSubtreeAttachmentBehaviour :: Ctx -> TextNodeAttachmentBehaviour
 resolveSubtreeAttachmentBehaviour =
-  fromMaybe Fail . leafNodeAttachmentBahaviour . cliArgs
+  fromMaybe Fail . textNodeAttachmentBahaviour . cliArgs
 
 resolveMustacheTemplate :: Ctx -> Maybe String
 resolveMustacheTemplate ctx =

@@ -92,6 +92,10 @@
       {
         "type": "textNode",
         "text": "Go out with Friends"
+      },
+      {
+        "type": "fragmentNode",
+        "alias": "test-fragment"
       }
     ]
   }
