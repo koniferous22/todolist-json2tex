@@ -27,6 +27,7 @@ import SubtreeAttachment (attachSubtrees)
 import Text.Mustache (compileTemplate, substitute)
 import TodoSection.Data (TodoSection(..))
 import TodoSection.Resolve (resolveTodoSections)
+import System.Exit (exitWith, ExitCode (ExitFailure), exitSuccess)
 
 readInput :: Maybe FilePath -> IO BL.ByteString
 readInput Nothing = BL.getContents
@@ -128,5 +129,5 @@ main = do
                 subtitle'
                 todoResolved
   case result of
-    Left err -> putStrLn err
-    Right _ -> return ()
+    Left err -> putStrLn err >> exitWith (ExitFailure 1)
+    Right _ -> exitSuccess
