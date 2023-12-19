@@ -123,38 +123,6 @@ There are 4 node types
 \end{itemize}
 ```
 
-### `"type": "fragmentNode"`
-
-Fragment node just passes the rendering ot its children, kinda like `React.Fragment`
-
-#### JSON
-
-```json
-{
-  "type": "fragmentNode",
-  "children": [
-    {
-      "type": "ulNode",
-      "text": "My Itemize",
-      "children": [
-        {
-          "type": "textNode",
-          "text": "Example Item"
-        }
-      ]
-    }
-  ]
-}
-```
-
-#### `.tex` output
-
-```tex
-\begin{itemize}
-  \item Example Item
-\end{itemize}
-```
-
 ### Notes
 
 Note that the entire todo context is wrapped in, so rendering `textNode` outside of scope of `olNode`, or `ulNode` isn't a problem
@@ -257,6 +225,21 @@ pdflatex \
   -interaction=errorstopmode \
   -output-directory=./examples/example-subtree/pdf-output \
   ./examples/example-subtree/tex-output/todo.tex
+```
+
+#### Attaching to empty `ulNode`, or `olNode`
+
+If `ulNode`, or `olNode` serves only for categoric purpose, rendering can be skipped with `skipIfNoChildren` boolean attribute
+
+Following node will not render anything unless subtree is attached under `test-node`
+
+```json
+{
+  "type": "ulNode",
+  "alias": "test-node",
+  "text": "Won't be rendered",
+  "children": []
+}
 ```
 
 ### Env-variable conditions

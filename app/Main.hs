@@ -24,10 +24,10 @@ import Rendering.Mustache (MustacheCtx(MustacheCtx))
 import Rendering.Options (TexRenderOptions(..))
 import Rendering.Tex (renderTex)
 import SubtreeAttachment (attachSubtrees)
+import System.Exit (ExitCode(ExitFailure), exitSuccess, exitWith)
 import Text.Mustache (compileTemplate, substitute)
 import TodoSection.Data (TodoSection(..))
 import TodoSection.Resolve (resolveTodoSections)
-import System.Exit (exitWith, ExitCode (ExitFailure), exitSuccess)
 
 readInput :: Maybe FilePath -> IO BL.ByteString
 readInput Nothing = BL.getContents
@@ -82,8 +82,7 @@ main = do
           return . A.eitherDecode $ attachmentInputContents
       subtreeAttachments <- retrieveRight . concatResults $ attachmentInputs
       todoWithSubtrees <-
-        retrieveRight .
-        attachSubtrees subtreeAttachmentBehaviour todo $
+        retrieveRight . attachSubtrees subtreeAttachmentBehaviour todo $
         subtreeAttachments
       let title' = title . cliArgs $ ctx
       let subtitle' = subtitle . cliArgs $ ctx

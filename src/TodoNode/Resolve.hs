@@ -12,30 +12,24 @@ resolveTodoNode ctx n@(TodoTextNode _ conditions' _) =
   if maybe True (resolveCondition ctx) conditions'
     then Just n
     else Nothing
-resolveTodoNode ctx (TodoItemizeNode alias' conditions' text' children') =
+resolveTodoNode ctx (TodoItemizeNode alias' conditions' text' skipIfNoChildren' children') =
   if maybe True (resolveCondition ctx) conditions'
     then Just
            (TodoItemizeNode
               alias'
               conditions'
               text'
+              skipIfNoChildren'
               (resolveTodoNodes ctx children'))
     else Nothing
-resolveTodoNode ctx (TodoEnumerateNode alias' conditions' text' children') =
+resolveTodoNode ctx (TodoEnumerateNode alias' conditions' text' skipIfNoChildren' children') =
   if maybe True (resolveCondition ctx) conditions'
     then Just
            (TodoEnumerateNode
               alias'
               conditions'
               text'
-              (resolveTodoNodes ctx children'))
-    else Nothing
-resolveTodoNode ctx (TodoFragmentNode alias' conditions' children') =
-  if maybe True (resolveCondition ctx) conditions'
-    then Just
-           (TodoFragmentNode
-              alias'
-              conditions'
+              skipIfNoChildren'
               (resolveTodoNodes ctx children'))
     else Nothing
 

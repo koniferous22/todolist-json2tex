@@ -35,9 +35,7 @@ import Data.Time
   , nominalDay
   , zonedTimeToLocalTime
   )
-import SubtreeAttachment.AttachmentBehaviour
-  ( TextNodeAttachmentBehaviour(..)
-  )
+import SubtreeAttachment.AttachmentBehaviour (TextNodeAttachmentBehaviour(..))
 
 data Ctx = Ctx
   { envVars :: Todo2TexEnvVars

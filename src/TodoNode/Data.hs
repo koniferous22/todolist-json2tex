@@ -8,35 +8,29 @@ module TodoNode.Data
 import Conditions.Data (Condition(..))
 import Data.Aeson
 import Data.Aeson.Types (Parser)
-import Data.Maybe(fromMaybe)
+import Data.Maybe (fromMaybe)
 import GHC.Generics
 
 data TodoNode
   = TodoTextNode
-      {
-        alias :: Maybe String
+      { alias :: Maybe String
       , conditions :: Maybe Condition
       , text :: String
       }
   | TodoItemizeNode
-      { 
-        alias :: Maybe String
+      { alias :: Maybe String
       , conditions :: Maybe Condition
       , text :: String
+      , skipIfNoChildren :: Bool
       , children :: [TodoNode]
       }
   | TodoEnumerateNode
       { alias :: Maybe String
       , conditions :: Maybe Condition
       , text :: String
+      , skipIfNoChildren :: Bool
       , children :: [TodoNode]
       }
-  | TodoFragmentNode
-    {
-        alias :: Maybe String
-      , conditions :: Maybe Condition
-      , children :: [TodoNode]
-    }
   deriving (Show, Generic)
 
 instance FromJSON TodoNode where
@@ -45,12 +39,15 @@ instance FromJSON TodoNode where
       tag <- obj .: "type" :: Parser String
       alias' <- obj .:? "alias"
       conditions' <- obj .:? "conditions"
+      text' <- obj .: "text"
       case tag of
-        "textNode" -> TodoTextNode alias' conditions' <$> obj .: "text"
+        "textNode" -> return . TodoTextNode alias' conditions' $ text'
         "ulNode" ->
-          TodoItemizeNode alias' conditions' <$> obj .: "text" <*> (fromMaybe [] <$> obj .:? "children")
+          TodoItemizeNode alias' conditions' text' <$>
+          (fromMaybe False <$> obj .:? "skipIfNoChildren") <*>
+          (fromMaybe [] <$> obj .:? "children")
         "olNode" ->
-          TodoEnumerateNode alias' conditions' <$> obj .: "text" <*> (fromMaybe [] <$> obj .:? "children")
-        "fragmentNode" ->
-          TodoFragmentNode alias' conditions' <$> (fromMaybe [] <$> obj .:? "children")
+          TodoEnumerateNode alias' conditions' text' <$>
+          (fromMaybe False <$> obj .:? "skipIfNoChildren") <*>
+          (fromMaybe [] <$> obj .:? "children")
         _ -> fail "Invalid tag"

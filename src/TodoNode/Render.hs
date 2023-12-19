@@ -28,16 +28,17 @@ renderTexNode :: TexRenderOptions -> Int -> TodoNode -> BB.Builder
 renderTexNode _ offset (TodoTextNode _ _ t) =
   repeatChar ' ' offset <>
   BB.stringUtf8 "\\item " <> BB.stringUtf8 t <> BB.charUtf8 '\n'
-renderTexNode opts offset (TodoItemizeNode _ _ t children') =
+renderTexNode _ _ (TodoItemizeNode _ _ _ True []) = mempty
+renderTexNode opts offset (TodoItemizeNode _ _ t _ children') =
   repeatChar ' ' offset <>
   BB.stringUtf8 "\\item " <>
   BB.stringUtf8 t <>
   BB.charUtf8 '\n' <>
   renderBeginEndForNonEmptyLists opts (itemizeTag opts) offset children'
-renderTexNode opts offset (TodoEnumerateNode _ _ t children') =
+renderTexNode _ _ (TodoEnumerateNode _ _ _ True []) = mempty
+renderTexNode opts offset (TodoEnumerateNode _ _ t _ children') =
   repeatChar ' ' offset <>
   BB.stringUtf8 "\\item " <>
   BB.stringUtf8 t <>
   BB.charUtf8 '\n' <>
   renderBeginEndForNonEmptyLists opts (enumerateTag opts) offset children'
-renderTexNode opts offset (TodoFragmentNode _ _ children') = renderTexNodes opts offset children'
